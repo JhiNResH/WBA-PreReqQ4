@@ -3,16 +3,20 @@ import { Connection, Keypair, SystemProgram, PublicKey } from
 import { Program, Wallet, AnchorProvider, Address } from
     "@project-serum/anchor"
 import { WbaPrereq, IDL } from "./programs/wba_prereq";
-import wallet from "./wba-wallet.json";
+import wallet from "./wba-wallet.json"
+import bs58 from 'bs58';
 
 // We're going to import our keypair from the wallet file
-const keypair = Keypair.fromSecretKey(new Uint8Array(wallet));
+const secretKeyString = wallet.secretkey[0];
+const secretKeyArrayBuffer = Buffer.from(bs58.decode(secretKeyString));
+const keypair = Keypair.fromSecretKey(secretKeyArrayBuffer);
+
 
 // Create a devnet connection
 const connection = new Connection("https://api.devnet.solana.com");
 
 // Github account
-const github = Buffer.from("<https://github.com/JhiNResH>", "utf8");
+const github = Buffer.from("JhiNResH", "utf8");
 
 // Create our anchor provider
 const provider = new AnchorProvider(connection, new Wallet(keypair), {
